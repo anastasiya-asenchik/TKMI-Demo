@@ -1,30 +1,20 @@
 package com.tkmi.test.unit.controllers
 
+import com.tkmi.test.unit.MvcService
 import com.tkmi.test.unit.dataProvider.DemoDataProvider
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
-import spock.lang.Ignore
-import spock.lang.Specification
 
-@AutoConfigureMockMvc
-@SpringBootTest
-class DemoControllerTest extends Specification {
+class DemoControllerTest extends MvcService {
 	
-	@Autowired MockMvc mockMvc
-	
-  @Ignore('wip')
 	def paramGreetingShouldReturnTailoredMessage() {
-    given: ''
-    def contentString = "{'message': ${data[0]}, 'key': ${data[1]}}"
+    given:
+    def contentString = [
+		    message: data[0],
+		    key: data[1]
+    ]
     when:
-    def response = mockMvc.perform(MockMvcRequestBuilders.post("/agg").content(contentString))
-		    .andReturn().response
+		def res = get(AGG_ENDPOINT, contentString)
     then:
-    assert response.content.toString() == data[2]
+    assert res.data == data[2]
     where: data << DemoDataProvider.demo()
-   
   }
 }
