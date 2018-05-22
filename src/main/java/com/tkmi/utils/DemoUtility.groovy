@@ -91,7 +91,9 @@ class DemoUtility implements Serializable {
   }
   
   def getValueByKey(map, key){
-    collectMaps(map).findAll{key in it.keySet()}[key]
+    map.class == String.class ?
+      getValueByKeyJson(map, key) :
+      collectMaps(map).findAll{key in it.keySet()}[key]
   }
 
   def getBucketByKey(map, key){
@@ -177,5 +179,9 @@ class DemoUtility implements Serializable {
       return list
     }
     (element instanceof String) ? "\"$element\"": element?.toString()
+  }
+  
+  def byteArrayOutputStreamToMap(bytes){
+    new ObjectMapper().readValue(bytes.toString(), LinkedHashMap)
   }
 }
