@@ -3,11 +3,8 @@ package com.tkmi.test.unit.controllers
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.google.gson.Gson
-import com.tkmi.serialization.RequestProperties
 import com.tkmi.services.DemoService
-import com.tkmi.test.unit.MvcService
 import com.tkmi.test.unit.dataProvider.DemoDataProvider
-import org.springframework.beans.factory.annotation.Autowire
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -15,6 +12,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+import spock.lang.Ignore
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -28,7 +26,8 @@ class DemoMvcMockNoAppContextTest extends Specification {
 	@MockBean DemoService demoService
 	
 	ObjectMapper mapper = new ObjectMapper()
-	
+
+    @Ignore('wip')
 	@Unroll 'Strategy_1_MockMVC_in_Standalone_Mode_Test'() {
 		given: 'request body'
 		def requestProperties = [
