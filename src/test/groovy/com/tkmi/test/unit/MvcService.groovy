@@ -1,6 +1,5 @@
 package com.tkmi.test.unit
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.gson.Gson
 import com.tkmi.utils.DemoUtility
 import org.springframework.beans.factory.annotation.Autowired
