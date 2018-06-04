@@ -103,6 +103,8 @@ task wrapper(type: Wrapper) {
 }
 
 configurations {
+  acceptanceTestCompile.extendsFrom testCompile
+  acceptanceTestRuntime.extendsFrom testRuntime
   integrationTestCompile.extendsFrom testCompile
   integrationTestRuntime.extendsFrom testRuntime
   testCompile.exclude(group: 'ch.qos.logback')
@@ -113,13 +115,21 @@ bootRun {
 }
 
 sourceSets {
+  acceptanceTest {
+    groovy {
+      compileClasspath += main.output + test.output
+      runtimeClasspath += main.output + test.output
+      srcDir file('src/acceptance-test/groovy')
+    }
+	  resources.srcDir file('src/acceptance-test/resources')
+  }
   integrationTest {
     groovy {
       compileClasspath += main.output + test.output
       runtimeClasspath += main.output + test.output
       srcDir file('src/integration-test/groovy')
     }
-    resources.srcDir file('src/integration-test/resources')
+	  resources.srcDir file('src/integration-test/resources')
   }
   /*
   This looks far too much like black magic, but without the next two statements the compiler is unable to resolve
@@ -157,7 +167,12 @@ jacocoTestReport {
   }
 
   def jacocoTestFiles = []
-
+  
+  def acceptanceTestCoverageFileLocation = "${buildDir}/jacoco/acceptanceTest.exec"
+  if (file(acceptanceTestCoverageFileLocation).exists()) {
+    jacocoTestFiles << acceptanceTestCoverageFileLocation
+  }
+  
   def integrationTestCoverageFileLocation = "${buildDir}/jacoco/integrationTest.exec"
   if (file(integrationTestCoverageFileLocation).exists()) {
       jacocoTestFiles << integrationTestCoverageFileLocation
@@ -212,6 +227,17 @@ tasks.withType(Test) {
 tasks.withType(JavaCompile) {
   options.compilerArgs << '-Xlint:deprecation'
   options.fork = true
+}
+
+task acceptanceTest(type: Test) {
+	if (System.properties['host'] != null) {
+		systemProperty "acceptance.rest.host", System.properties['host']
+	}
+	if (System.properties['port'] != null) {
+		systemProperty "acceptance.rest.port", System.properties['port']
+	}
+  acceptanceTest.testClassesDirs = sourceSets.acceptanceTest.output.classesDirs
+  acceptanceTest.classpath = sourceSets.acceptanceTest.runtimeClasspath
 }
 
 task integrationTest(type: Test) {

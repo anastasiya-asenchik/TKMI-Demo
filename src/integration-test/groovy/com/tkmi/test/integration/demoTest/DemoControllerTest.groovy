@@ -8,15 +8,15 @@ class DemoControllerTest extends BaseTest {
 	
 	@Test(dataProvider = 'demo', dataProviderClass = DemoDataProvider)
 	void 'Demo test'(message, key, expectedResult){
-		// given
+		// todo given
 		def payload =
 				[
 						message: message,
 						key: key
 				]
-		// when
+		// todo when
 		def res = restService.restAgg(payload)
-		// then
+		// todo then
 		assert res.data.data == expectedResult
 	}
 }

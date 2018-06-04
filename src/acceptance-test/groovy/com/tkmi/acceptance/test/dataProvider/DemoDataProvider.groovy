@@ -1,4 +1,4 @@
-package com.tkmi.test.unit.dataProvider
+package com.tkmi.acceptance.test.dataProvider
 
 import org.testng.annotations.DataProvider
 
