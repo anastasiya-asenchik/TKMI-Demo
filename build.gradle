@@ -103,8 +103,6 @@ task wrapper(type: Wrapper) {
 }
 
 configurations {
-  acceptanceTestCompile.extendsFrom testCompile
-  acceptanceTestRuntime.extendsFrom testRuntime
   integrationTestCompile.extendsFrom testCompile
   integrationTestRuntime.extendsFrom testRuntime
   testCompile.exclude(group: 'ch.qos.logback')
@@ -115,14 +113,6 @@ bootRun {
 }
 
 sourceSets {
-  acceptanceTest {
-    groovy {
-      compileClasspath += main.output + test.output
-      runtimeClasspath += main.output + test.output
-      srcDir file('src/acceptance-test/groovy')
-    }
-	  resources.srcDir file('src/acceptance-test/resources')
-  }
   integrationTest {
     groovy {
       compileClasspath += main.output + test.output
@@ -227,17 +217,6 @@ tasks.withType(Test) {
 tasks.withType(JavaCompile) {
   options.compilerArgs << '-Xlint:deprecation'
   options.fork = true
-}
-
-task acceptanceTest(type: Test) {
-	if (System.properties['host'] != null) {
-		systemProperty "acceptance.rest.host", System.properties['host']
-	}
-	if (System.properties['port'] != null) {
-		systemProperty "acceptance.rest.port", System.properties['port']
-	}
-  acceptanceTest.testClassesDirs = sourceSets.acceptanceTest.output.classesDirs
-  acceptanceTest.classpath = sourceSets.acceptanceTest.runtimeClasspath
 }
 
 task integrationTest(type: Test) {
